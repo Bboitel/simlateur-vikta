@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f5f6fa;
+      background-color: #F5F6FA;
       padding: 2rem;
       max-width: 600px;
       margin: auto;
@@ -36,7 +35,7 @@
     }
     .price {
       font-size: 1.5rem;
-      color: #007bff;
+      color: #007BFF;
       text-align: center;
       margin-top: 1.5rem;
       font-weight: bold;
@@ -45,7 +44,7 @@
       margin: 2rem auto 0;
       display: block;
       padding: 0.75rem 1.5rem;
-      background: #007bff;
+      background: #007BFF;
       color: white;
       border: none;
       border-radius: 8px;
@@ -55,15 +54,13 @@
   </style>
 </head>
 <body>
-
 <h1>Simulateur de crédits VIKTA</h1>
 <div class="simulator">
   <div class="field">
     <label for="societies">Nombre de sociétés :</label>
-    <input type="range" id="societies" min="1" max="50" value="1" oninput="updateCredits()" />
+    <input type="range" id="societies" min="1" max="30000" value="1" oninput="updateCredits()" />
     <span id="societyCount">1</span>
   </div>
-
   <div class="field">
     <label>Services :</label>
     <input type="checkbox" id="rmt" onchange="updateCredits()" /> Registres de mouvements de titres (+100 crédits)<br/>
@@ -71,7 +68,6 @@
     <input type="checkbox" id="gen" onchange="updateCredits()" /> Génération documentaire (+25 crédits)<br/>
     <input type="checkbox" id="gu" onchange="updateCredits()" /> Formalités Guichet Unique (+5 crédits)<br/>
   </div>
-
   <div class="field">
     <label for="archivage">Archivage sécurisé :</label>
     <select id="archivage" onchange="updateCredits()">
@@ -79,14 +75,11 @@
       <option value="10">Oui (+10 crédits)</option>
     </select>
   </div>
-
   <div class="price">
     Total : <span id="totalCredits">0</span> crédits → Estimé à <span id="estimatedPrice">0</span> €
   </div>
-
   <button onclick="alert('Un conseiller vous contactera sous peu.')">Demander un devis</button>
 </div>
-
 <script>
   function getCreditRate(credits) {
     if (credits >= 360000) return 0.10;
@@ -99,30 +92,24 @@
     if (credits >= 3600) return 0.55;
     if (credits >= 1800) return 0.70;
     if (credits >= 900) return 1.00;
-    return 1.00;
+    return 1.00; // tarif par défaut
   }
-
   function updateCredits() {
     const basePerSociety = 80;
     const societies = parseInt(document.getElementById("societies").value);
-
     const rmt = document.getElementById("rmt").checked ? 100 : 0;
     const rd = document.getElementById("rd").checked ? 50 : 0;
     const gen = document.getElementById("gen").checked ? 25 : 0;
     const gu = document.getElementById("gu").checked ? 5 : 0;
     const archivage = parseInt(document.getElementById("archivage").value);
-
     const totalCredits = (societies * basePerSociety) + rmt + rd + gen + gu + archivage;
     const rate = getCreditRate(totalCredits);
     const price = totalCredits * rate;
-
     document.getElementById("societyCount").innerText = societies;
     document.getElementById("totalCredits").innerText = totalCredits;
     document.getElementById("estimatedPrice").innerText = price.toFixed(2);
   }
-
   updateCredits();
 </script>
-
 </body>
 </html>
