@@ -75,7 +75,7 @@
   <div class="price">
     Total : <span id="totalCredits">0</span> crédits → Estimé à <span id="estimatedPrice">0</span> €
   </div>
-  <button id="quoteButton" onclick="alert('Un conseiller vous contactera sous peu.')">Demander un devis</button>
+  <button id="quoteButton" onclick="alert('Un conseiller vous contactera sous peu.')" disabled>Demander un devis</button>
 </div>
 <script>
   function getCreditRate(credits) {
@@ -89,7 +89,7 @@
     if (credits >= 3600) return 0.55;
     if (credits >= 1800) return 0.70;
     if (credits >= 900) return 1.00;
-    return 1.00;
+    return 1.00; // tarif par défaut
   }
   function updateCredits() {
     const basePerSociety = 80;
@@ -100,7 +100,11 @@
     const gu = document.getElementById("gu").checked ? 5 : 0;
     const totalCredits = (societies * basePerSociety) + rmt + rd + gen + gu;
     const rate = getCreditRate(totalCredits);
-    const price = totalCredits * rate;
+    let price = totalCredits * rate;
+    // Ensure the price does not go below 900 €
+    if (price < 900) {
+      price = 900;
+    }
     document.getElementById("societyCount").innerText = societies;
     document.getElementById("totalCredits").innerText = totalCredits;
     document.getElementById("estimatedPrice").innerText = price.toFixed(2);
