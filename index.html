@@ -51,6 +51,10 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    button:disabled {
+      background: #CCCCCC;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -58,27 +62,20 @@
 <div class="simulator">
   <div class="field">
     <label for="societies">Nombre de sociétés :</label>
-    <input type="range" id="societies" min="1" max="30000" value="1" oninput="updateCredits()" />
-    <span id="societyCount">1</span>
+    <input type="range" id="societies" min="9" max="30000" value="9" oninput="updateCredits()" />
+    <span id="societyCount">9</span>
   </div>
   <div class="field">
     <label>Services :</label>
-    <input type="checkbox" id="rmt" onchange="updateCredits()" /> Registres de mouvements de titres (+100 crédits)<br/>
-    <input type="checkbox" id="rd" onchange="updateCredits()" /> Registres de décisions (AG) (+50 crédits)<br/>
-    <input type="checkbox" id="gen" onchange="updateCredits()" /> Génération documentaire (+25 crédits)<br/>
-    <input type="checkbox" id="gu" onchange="updateCredits()" /> Formalités Guichet Unique (+5 crédits)<br/>
-  </div>
-  <div class="field">
-    <label for="archivage">Archivage sécurisé :</label>
-    <select id="archivage" onchange="updateCredits()">
-      <option value="0">Non</option>
-      <option value="10">Oui (+10 crédits)</option>
-    </select>
+    <input type="checkbox" id="rmt" onchange="updateCredits()" checked /> Registres de mouvements de titres (+100 crédits)<br/>
+    <input type="checkbox" id="rd" onchange="updateCredits()" checked /> Registres de décisions (AG) (+50 crédits)<br/>
+    <input type="checkbox" id="gen" onchange="updateCredits()" checked /> Génération documentaire (+25 crédits)<br/>
+    <input type="checkbox" id="gu" onchange="updateCredits()" checked /> Formalités Guichet Unique (+5 crédits)<br/>
   </div>
   <div class="price">
     Total : <span id="totalCredits">0</span> crédits → Estimé à <span id="estimatedPrice">0</span> €
   </div>
-  <button onclick="alert('Un conseiller vous contactera sous peu.')">Demander un devis</button>
+  <button id="quoteButton" onclick="alert('Un conseiller vous contactera sous peu.')">Demander un devis</button>
 </div>
 <script>
   function getCreditRate(credits) {
@@ -92,7 +89,7 @@
     if (credits >= 3600) return 0.55;
     if (credits >= 1800) return 0.70;
     if (credits >= 900) return 1.00;
-    return 1.00; // tarif par défaut
+    return 1.00;
   }
   function updateCredits() {
     const basePerSociety = 80;
@@ -101,14 +98,16 @@
     const rd = document.getElementById("rd").checked ? 50 : 0;
     const gen = document.getElementById("gen").checked ? 25 : 0;
     const gu = document.getElementById("gu").checked ? 5 : 0;
-    const archivage = parseInt(document.getElementById("archivage").value);
-    const totalCredits = (societies * basePerSociety) + rmt + rd + gen + gu + archivage;
+    const totalCredits = (societies * basePerSociety) + rmt + rd + gen + gu;
     const rate = getCreditRate(totalCredits);
     const price = totalCredits * rate;
     document.getElementById("societyCount").innerText = societies;
     document.getElementById("totalCredits").innerText = totalCredits;
     document.getElementById("estimatedPrice").innerText = price.toFixed(2);
+    // Enable/disable button based on minimum 900 credits
+    document.getElementById("quoteButton").disabled = totalCredits < 900;
   }
+  // Initial update
   updateCredits();
 </script>
 </body>
