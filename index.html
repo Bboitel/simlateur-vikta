@@ -6,7 +6,7 @@
   <title>Simulateur de crédits VIKTA</title>
   <style>
     :root {
-      --primary: #4361EE;
+      --primary: #27A5B2; /* Changed color */
       --secondary: #3F37C9;
       --accent: #4895EF;
       --light: #F8F9FA;
@@ -15,7 +15,7 @@
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #F5F7FA 0%, #C3CFE2 100%);
+      background: rgba(255, 255, 255, 0.9);
       min-height: 100vh;
       padding: 2rem;
       display: flex;
@@ -25,14 +25,14 @@
     }
     h1 {
       text-align: center;
-      color: var(--secondary);
+      color: var(--primary);
       margin-bottom: 1.5rem;
       font-size: 2.2rem;
       font-weight: 600;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
     .simulator {
-      background: white;
+      background: rgba(29, 160, 200, 0.1);
       padding: 2.5rem;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -47,7 +47,7 @@
       font-weight: 600;
       display: block;
       margin-bottom: 0.8rem;
-      color: var(--secondary);
+      color: var(--primary);
       font-size: 1.1rem;
     }
     input[type="range"] {
@@ -85,7 +85,7 @@
       transition: all 0.2s;
     }
     .checkbox-label:hover {
-      background-color: rgba(67, 97, 238, 0.05);
+      background-color: rgba(39, 165, 178, 0.05);
     }
     .price {
       font-size: 1.8rem;
@@ -94,7 +94,7 @@
       margin: 2.5rem 0;
       font-weight: 700;
       padding: 1.5rem;
-      background: rgba(67, 97, 238, 0.08);
+      background: rgba(39, 165, 178, 0.08);
       border-radius: 12px;
     }
     button {
@@ -138,7 +138,7 @@
   </style>
 </head>
 <body>
-<h1>Simulateur de crédits VIKTA</h1>
+<h1> <p style="color: #27A5B2;">Simulateur de crédits VIKTA</p></h1>
 <div class="simulator">
   <div class="field">
     <label for="societies">Nombre de sociétés :</label>
@@ -169,7 +169,7 @@
   <div class="price">
     Total : <span id="totalCredits">0</span> crédits → Estimé à <span id="estimatedPrice">0</span> €
   </div>
-  <button id="quoteButton" onclick="alert('Un conseiller vous contactera sous peu.')">Demander un devis</button>
+  <button id="quoteButton" onclick="alert('Un conseiller vous contactera sous peu.')">Estimation du prix</button> <!-- Changed button text -->
 </div>
 <script>
   function getCreditRate(credits) {
@@ -186,13 +186,16 @@
     return 1.00;
   }
   function updateCredits() {
-    const basePerSociety = 80;
+    const baseCredits = 0; // Base credits per society
     const societies = parseInt(document.getElementById("societies").value);
     const rmt = document.getElementById("rmt").checked ? 100 : 0;
     const rd = document.getElementById("rd").checked ? 50 : 0;
     const gen = document.getElementById("gen").checked ? 25 : 0;
     const gu = document.getElementById("gu").checked ? 5 : 0;
-    const totalCredits = (societies * basePerSociety) + rmt + rd + gen + gu;
+    // Calculate total service credits
+    const totalServiceCredits = rmt + rd + gen + gu;
+    // Calculate total credits based on the number of societies and total service credits
+    const totalCredits = societies * (baseCredits + totalServiceCredits);
     const rate = getCreditRate(totalCredits);
     let price = totalCredits * rate;
     // Ensure the price does not go below 900 €
